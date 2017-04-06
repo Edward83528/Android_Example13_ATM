@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">ATM</string>
+    <string name="slectmoney">餘額查詢</string>
+    <string name="exchange">交易明細</string>
+    <string name="news">最新消息</string>
+    <string name="financial">投資理財</string>
+    <string name="exit">離開</string>
+    <string name="date">日期</string>
+    <string name="talk">說明</string>
+    <string name="money">金額</string>
+    <string name="add">增加</string>
+    <string name="title_activity_finance2">Finance2Activity</string>
+    <string name="title_activity_finance">FinanceActivity</string>
+</resources>
