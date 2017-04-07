@@ -26,6 +26,7 @@ public class Add2Activity extends AppCompatActivity {
         findview();
         helper = MyDBHelper.getInstance(this);
         //擁有更新能力的SQLiteDatabase物件，用途為新增、修改或刪除
+        db = helper.getWritableDatabase();
     }
 
 
@@ -62,7 +63,6 @@ public class Add2Activity extends AppCompatActivity {
             //使用SQLiteDatabase的insert方法新增記錄至表格，第一個參數為表格名稱，第三個則是「資料包」
             //取得資料庫物件後呼叫insert方法，傳入表格名稱與values集合物件以新增這筆記錄，若成功會回傳新增記錄的id值
             //insert方法中的第二個參數可填入一個欄位名稱，如果設null,當第三個參數values內無任何資料時，會在該欄位上給予空值
-            db = helper.getWritableDatabase();
             long id = db.insert("exp", null, values);
             //使用Log印出除錯資訊
             Log.d("ADD", id + "");
