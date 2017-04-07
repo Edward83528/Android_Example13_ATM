@@ -1,16 +1,20 @@
 package com.example.u0151051.atm;
 
 import android.content.ContentValues;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 
 public class Add2Activity extends AppCompatActivity {
     Button btn6;
     EditText et1, et2, et3;
+    DatePicker datePicker;
+    private SQLiteDatabase db;
     //宣告我們設計的 MyDBHelper類別
     private MyDBHelper helper;
 
@@ -18,16 +22,20 @@ public class Add2Activity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add2);
-        //MyDBHelper(傳入Add2Activity本身, "資料庫名稱", (在此使用null,代表以標準模式SQLiteCursor處理Cursor),本應用程式目前資料庫版本)
-        helper = new MyDBHelper(this, "expense.db", null, 1);
+        //建立資料庫 MyDBHelper(傳入Add2Activity本身)
         findview();
+        helper = MyDBHelper.getInstance(this);
+        //擁有更新能力的SQLiteDatabase物件，用途為新增、修改或刪除
     }
+
+
 
     void findview() {
         btn6 = (Button) findViewById(R.id.button6);
         et1 = (EditText) findViewById(R.id.editText);
         et2 = (EditText) findViewById(R.id.editText2);
         et3 = (EditText) findViewById(R.id.editText3);
+        datePicker = (DatePicker) findViewById(R.id.datePicker);
         btn6.setOnClickListener(clickListener);
     }
 
@@ -35,7 +43,14 @@ public class Add2Activity extends AppCompatActivity {
         @Override
         public void onClick(View v) {
             //取得畫面上使用者輸入的資料
-            String cdate = et1.getText().toString();
+            // 取得DatePicker並轉換字串
+            //畫面增加DatePicker元件(xml檔增加這兩行)
+            // 1.android:datePickerMode="spinner"設定日期選擇的模式為捲動式，預設值為「calendar」
+            // 2.android:calendarViewShown="false"是否顯示日曆屬性值，設定為false後日曆就不會出現
+            int year = datePicker.getYear();
+            int month = datePicker.getMonth() + 1;
+            int day = datePicker.getDayOfMonth();
+            String cdate = year + "-" + month + "-" + day;
             String info = et2.getText().toString();
             int amount = Integer.parseInt(et3.getText().toString());
             //收集一筆記錄的集合
@@ -47,7 +62,8 @@ public class Add2Activity extends AppCompatActivity {
             //使用SQLiteDatabase的insert方法新增記錄至表格，第一個參數為表格名稱，第三個則是「資料包」
             //取得資料庫物件後呼叫insert方法，傳入表格名稱與values集合物件以新增這筆記錄，若成功會回傳新增記錄的id值
             //insert方法中的第二個參數可填入一個欄位名稱，如果設null,當第三個參數values內無任何資料時，會在該欄位上給予空值
-            long id = helper.getWritableDatabase().insert("exp", null, values);
+            db = helper.getWritableDatabase();
+            long id = db.insert("exp", null, values);
             //使用Log印出除錯資訊
             Log.d("ADD", id + "");
         }
